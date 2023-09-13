@@ -1,6 +1,19 @@
+**** This is the response **** 245360112735089
 {"request":"get_status"}
 Sending payload size: 24
 BytesSent 8 Total Bytes0
 Sent payload size.
 BytesSent 24 Total Bytes0
 Received response: Status: success, Data: disconnected
+{"request":{"connect":245360112735089}}
+Sending payload size: 39
+BytesSent 8 Total Bytes0
+Sent payload size.
+BytesSent 39 Total Bytes0
+Received response: Status: success, Data: connected
+{"request":"get_status"}
+Sending payload size: 24
+BytesSent 8 Total Bytes0
+Sent payload size.
+BytesSent 24 Total Bytes0
+Received response: Status: success, Data: connected

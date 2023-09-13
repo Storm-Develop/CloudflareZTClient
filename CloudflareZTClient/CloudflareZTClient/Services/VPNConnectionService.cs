@@ -17,6 +17,7 @@ namespace CloudflareZTClient.Services
         private RestClient _client;
         private static string SOCKET_PATH = "/tmp/daemon-lite";
         private OauthTokenModel OauthToken;
+        private bool NoErrorContains = true;
 
         string url = "https://warp-registration.warpdir2792.workers.dev/";
         //"https://vladsamonintest.api.openvpn.com/api/beta/oauth/token?clientid=EHMG4dgdHZZZ09JQLFxj07rVL4jPGvvr.vladsamonintest&client_secret=Vr7xbZpjed3lXrPD3UP1FaMTjsZHwbGlxDyqTKdMvatHmAlm0bSRkrdfgDg3ziK4&grant_type=client_credentials"
@@ -27,7 +28,10 @@ namespace CloudflareZTClient.Services
 
             _client = new RestClient(url);
             GetOauthToken();
-            ConnectToSocket();
+            if(NoErrorContains)
+            {
+                ConnectToSocket();
+            }
             //var response = await _client.ExecuteAsync(request, cancellationToken);
             // SimpleGetRequestTest();
             /*    var restRequest = new RestRequest("/api/beta/regions", Method.Get);
@@ -46,6 +50,12 @@ namespace CloudflareZTClient.Services
                     // You may need to implement this differently for Android and iOS
                     var endpoint = new UnixEndPoint(SOCKET_PATH);
                     client.Connect(endpoint);
+
+                    // Send "get_connect" request
+                    await SendRequestAsync(client, new { request = "get_status" });
+
+                    // Send "connect" request
+                    await SendRequestAsync(client, new { request = new { connect = OauthToken.data.auth_token } });
 
                     // Send "get_connect" request
                     await SendRequestAsync(client, new { request = "get_status" });
@@ -194,39 +204,20 @@ namespace CloudflareZTClient.Services
         }
         public void GetOauthToken()
         {
-           // string urlRequest = String.Format("api/beta/oauth/token?client_id={0}&client_secret={1}&grant_type=client_credentials",client_id,client_secret);
             var _restRequest = new RestRequest("", Method.Get);
             _restRequest.AddHeader("X-Auth-Key", "3735928559");
-            //  _restRequest.RequestFormat = DataFormat.Json;
-            //_restRequest.AddHeader("Accept", "application/json");
-            //_restRequest.AddHeader("Accept", "application/json");
-            //_restRequest.AddHeader("Content-Type", "application/x-www-form-urlencoded");
-            /// _restRequest.AddParameter("Flow", "application");
-           // _restRequest.AddUrlSegment("id", client_id);
-         //   _restRequest.AddUrlSegment("secret", client_secret);
-           // _restRequest.AddUrlSegment("grant_type", "client_credentials");
-            //    _restRequest.AddParameter("client_id", client_id);
-            //     _restRequest.AddParameter("client_secret", client_secret);
+
             var _restResponse = _client.Execute(_restRequest);
-            Console.WriteLine("**** This is the response **** " + _restResponse.Content);
-            var result = JsonConvert.DeserializeObject<OauthTokenModel>(_restResponse.Content);
-
-           // _restRequest = new RestRequest("get_status", Method.Get);
-           // _client.Execute(_restRequest);
-            //_restRequest.AddHeader("connect", "245346449271196");
-            //var authenticator = new OAuth2AuthorizationRequestHeaderAuthenticator(
-            //    result.access_token, result.token_type
-            //);
-
-            //var options = new RestClientOptions(url)
-            //{
-            //    Authenticator = authenticator
-            //};
-
-            //_client = new RestClient(options);
-         //   SimpleGetRequestTest();
-            //Assert
-         //   Console.WriteLine("**** This is the response **** " + _restResponse.Content);
+            if(!(_restResponse.Content.Contains("error")))
+            {
+                OauthToken = JsonConvert.DeserializeObject<OauthTokenModel>(_restResponse.Content);
+                Console.WriteLine("**** This is the response **** " + OauthToken.data.auth_token);
+            }
+            else
+            {
+                NoErrorContains = false;
+                Console.WriteLine("Error" + _restResponse.Content);
+            }
         }
 
 
