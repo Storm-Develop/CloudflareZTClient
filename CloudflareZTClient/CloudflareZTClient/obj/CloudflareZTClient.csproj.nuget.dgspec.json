@@ -1,34 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Work\\Documents\\GitHub\\CloudflareZTClient\\CloudflareZTClient\\CloudflareZTClient\\CloudflareZTClient.csproj": {}
+    "/Users/home/Documents/GitHub/CloudflareZTClient/CloudflareZTClient/CloudflareZTClient/CloudflareZTClient.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Work\\Documents\\GitHub\\CloudflareZTClient\\CloudflareZTClient\\CloudflareZTClient\\CloudflareZTClient.csproj": {
+    "/Users/home/Documents/GitHub/CloudflareZTClient/CloudflareZTClient/CloudflareZTClient/CloudflareZTClient.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Work\\Documents\\GitHub\\CloudflareZTClient\\CloudflareZTClient\\CloudflareZTClient\\CloudflareZTClient.csproj",
+        "projectUniqueName": "/Users/home/Documents/GitHub/CloudflareZTClient/CloudflareZTClient/CloudflareZTClient/CloudflareZTClient.csproj",
         "projectName": "CloudflareZTClient",
-        "projectPath": "C:\\Users\\Work\\Documents\\GitHub\\CloudflareZTClient\\CloudflareZTClient\\CloudflareZTClient\\CloudflareZTClient.csproj",
-        "packagesPath": "C:\\Users\\Work\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Work\\Documents\\GitHub\\CloudflareZTClient\\CloudflareZTClient\\CloudflareZTClient\\obj\\",
+        "projectPath": "/Users/home/Documents/GitHub/CloudflareZTClient/CloudflareZTClient/CloudflareZTClient/CloudflareZTClient.csproj",
+        "packagesPath": "/Users/home/.nuget/packages/",
+        "outputPath": "/Users/home/Documents/GitHub/CloudflareZTClient/CloudflareZTClient/CloudflareZTClient/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Work\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "/Users/home/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -80,11 +71,12 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.416\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.306/RuntimeIdentifierGraph.json"
         }
       }
     }

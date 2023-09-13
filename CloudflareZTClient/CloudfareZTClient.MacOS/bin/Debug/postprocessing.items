@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <_PostProcessingItem Include="CloudFareZTClient.app/Contents/MacOS/CloudFareZTClient">
+      <BCSymbolMapName>CloudFareZTClient.bcsymbolmap</BCSymbolMapName>
+      <NoDSymUtil>true</NoDSymUtil>
+      <dSYMSourcePathExists>false</dSYMSourcePathExists>
+      <NoSymbolStrip>true</NoSymbolStrip>
+      <dSYMInfoPlistRelativePath>CloudFareZTClient.app.dSYM\Contents\Info.plist</dSYMInfoPlistRelativePath>
+      <SymbolFile>/Users/home/Documents/GitHub/CloudflareZTClient/CloudflareZTClient/CloudfareZTClient.MacOS/obj/Debug/mtouch-symbols.list</SymbolFile>
+      <DSymName>CloudFareZTClient.app.dSYM</DSymName>
+      <SourceProjectPath>/Users/home/Documents/GitHub/CloudflareZTClient/CloudflareZTClient/CloudfareZTClient.MacOS</SourceProjectPath>
+    </_PostProcessingItem>
+  </ItemGroup>
+</Project>
