@@ -2,35 +2,15 @@ New Frame - {X=0,Y=97,Width=0,Height=0}
 {"request":"get_status"}
 Received response: Status: success, Data: disconnected
 Requesting a fresh OAuth token.
-**** This is the response **** 245360205768342
-{"request":{"connect":245360205768342}}
+**** This is the response **** 245360205258232
+{"request":{"connect":245360205258232}}
 Error sending/requesting: Object reference not set to an instance of an object
 Keep the same Oauth Token for 5 minutes
-{"request":{"connect":245360205768342}}
-Received response: Status: success, Data: connected
 {"request":"get_status"}
+Received response: Status: success, Data: disconnected
+{"request":{"connect":245360205258232}}
 Received response: Status: success, Data: connected
 {"request":"disconnect"}
 Received response: Status: success, Data: disconnected
 {"request":"get_status"}
-Received response: Status: success, Data: disconnected
-{"request":{"connect":245360205768342}}
-Received response: Status: success, Data: connected
-{"request":"get_status"}
-Received response: Status: success, Data: connected
-{"request":"disconnect"}
-Received response: Status: success, Data: disconnected
-{"request":"get_status"}
-Error sending/requesting: Object reference not set to an instance of an object
-{"request":{"connect":245360205768342}}
-Received response: Status: success, Data: connected
-{"request":"get_status"}
-Received response: Status: success, Data: disconnected
-{"request":"disconnect"}
-Received response: Status: success, Data: disconnected
-{"request":{"connect":245360205768342}}
-Received response: Status: success, Data: connected
-{"request":"get_status"}
-Received response: Status: success, Data: connected
-{"request":"disconnect"}
 Received response: Status: success, Data: disconnected

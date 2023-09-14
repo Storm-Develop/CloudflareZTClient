@@ -1,4 +1,5 @@
-﻿using CloudflareZTClient.Services;
+﻿using CloudflareZTClient.Models;
+using CloudflareZTClient.Services;
 using FreshMvvm;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,8 @@ namespace CloudflareZTClient.PageModels
     public class MainPageModel : FreshBasePageModel
     {
         private string vpnStatus;
-        private string vpnConnectionMessage;
         private VPNConnectionService vpnConnection;
-        private System.Timers.Timer timer;
+        private Timer timer;
         private bool isConnectedToVPN;
         private bool connectButtonEnabled;
         private bool disconnectButtonEnabled;
@@ -162,7 +162,7 @@ namespace CloudflareZTClient.PageModels
 
         private async Task ConnectToVPN(bool state)
         {
-            VPNConnectionService.StatusModel daemonStatus = null;
+            StatusModel daemonStatus = null;
             InProgressOfSendingCommand = true;
             ConnectButtonEnabled = false;
             DisconnectButtonEnabled = false;

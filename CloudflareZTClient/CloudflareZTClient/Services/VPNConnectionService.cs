@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using CloudflareZTClient.Models;
 using CloudflareZTClient.Services.Interfaces;
 using Newtonsoft.Json;
 using RestSharp;
@@ -274,51 +275,6 @@ namespace CloudflareZTClient.Services
 
             return buffer;
         }
-
-        public class StatusModel
-        {
-            public string status { get; set; }
-            public string message { get; set; }
-            public DataModel data { get; set; }
-
-            public override string ToString()
-            {
-                return $"Status: {status}, Data: {data.daemon_status}";
-            }
-        }
-
-        public class DataModel
-        {
-            public string daemon_status { get; set; }
-
-            public override string ToString()
-            {
-                return $"Daemon Status: {daemon_status}";
-            }
-        }
-
-
-        public class OauthTokenModel
-        {
-            public string status { get; set; }
-            public OuathDataModel data { get; set; }
-
-            public override string ToString()
-            {
-                return $"Status: {status}, Data: {data}";
-            }
-        }
-
-        public class OuathDataModel
-        {
-            public long auth_token { get; set; }
-
-            public override string ToString()
-            {
-                return $"Auth Token: {auth_token}";
-            }
-        }
-
 
     }
 }

@@ -19,8 +19,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Converters\" />
+    <None Remove="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Converters\" />
+    <Folder Include="Models\" />
   </ItemGroup>
 </Project>

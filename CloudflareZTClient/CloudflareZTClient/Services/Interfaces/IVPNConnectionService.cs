@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using static CloudflareZTClient.Services.VPNConnectionService;
+﻿using System.Threading.Tasks;
+using CloudflareZTClient.Models;
 
 namespace CloudflareZTClient.Services.Interfaces
 {
