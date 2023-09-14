@@ -8,9 +8,9 @@ namespace CloudflareZTClient.Services.Interfaces
 {
     public interface IVPNConnectionService
     {
-        Task StartConnectionAsync();
-        Task ConnectToVpnAsync();
-        Task DisconnectVpnAsync();
-        StatusModel DaemonStatusModel { get;}
+        Task<StatusModel> StartConnectionAsync();
+        Task<StatusModel> ConnectToVpnAsync();
+        Task<StatusModel> CheckStatusAsync();
+        Task<StatusModel> DisconnectVpnAsync();
     }
 }

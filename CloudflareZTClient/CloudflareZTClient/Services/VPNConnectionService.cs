@@ -27,22 +27,32 @@ namespace CloudflareZTClient.Services
                 this.daemonStatusModel = value;
             }
         }
+
+        private string errorMessage;
+
+        public string ErrorMessage
+        {
+            get => this.errorMessage;
+            private set
+            {
+                this.errorMessage = value;
+            }
+        }
+
         private string url = "https://warp-registration.warpdir2792.workers.dev/";
 
-        public async Task StartConnectionAsync()
+        public async Task<StatusModel> StartConnectionAsync()
         {
             var options = new RestClientOptions(url);
 
             _client = new RestClient(url);
             GetOauthToken();
-            if (NoErrorContains)
-            {
-                await ConnectToSocketAsync();
-            }
-            //CheckStatus();
+            await ConnectToSocketAsync();
+            await CheckStatusAsync();
+            return DaemonStatusModel;
         }
 
-        public async Task ConnectToVpnAsync()
+        public async Task<StatusModel> ConnectToVpnAsync()
         {
             if (socketClient != null && socketClient.Connected)
             {
@@ -53,10 +63,12 @@ namespace CloudflareZTClient.Services
             {
                 Console.WriteLine("Socket is not connected.");
             }
+            return DaemonStatusModel;
+
         }
 
 
-        public async Task DisconnectVpnAsync()
+        public async Task<StatusModel> DisconnectVpnAsync()
         {
             if (socketClient != null && socketClient.Connected)
             {
@@ -67,9 +79,10 @@ namespace CloudflareZTClient.Services
             {
                 Console.WriteLine("Socket is not connected.");
             }
+            return DaemonStatusModel;
         }
 
-        public async Task CheckStatusAsync()
+        public async Task<StatusModel> CheckStatusAsync()
         {
             if (socketClient != null && socketClient.Connected)
             {
@@ -80,6 +93,7 @@ namespace CloudflareZTClient.Services
             {
                 Console.WriteLine("Socket is not connected.");
             }
+            return DaemonStatusModel;
         }
 
         private async Task ConnectToSocketAsync()
@@ -216,6 +230,7 @@ namespace CloudflareZTClient.Services
         public class StatusModel
         {
             public string status { get; set; }
+            public string message { get; set; }
             public DataModel data { get; set; }
 
             public override string ToString()
@@ -248,7 +263,9 @@ namespace CloudflareZTClient.Services
             else
             {
                 NoErrorContains = false;
-                Console.WriteLine("Error" + _restResponse.Content);
+                var errorMessage = "Error" + _restResponse.Content;
+                ErrorMessage = errorMessage;
+                Console.WriteLine(errorMessage);
             }
         }
 

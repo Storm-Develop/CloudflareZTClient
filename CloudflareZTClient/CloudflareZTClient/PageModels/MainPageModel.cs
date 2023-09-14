@@ -2,6 +2,7 @@
 using FreshMvvm;
 using System;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -15,6 +16,11 @@ namespace CloudflareZTClient.PageModels
         private string vpnConnectionMessage;
         private VPNConnectionService vpnConnection;
         private System.Timers.Timer timer;
+        private bool isConnectedToVPN;
+        private bool connectButtonEnabled;
+        private bool disconnectButtonEnabled;
+        //Indicates if connection or disconnect in progress
+        private bool InProgressOfSendingCommand;
         #region Default Override functions  
         protected override async void ViewIsAppearing(object sender, EventArgs e)
         {
@@ -30,28 +36,57 @@ namespace CloudflareZTClient.PageModels
             timer.Enabled = true;
             timer.Elapsed += CheckVPNStatus;
             timer.Start();
+            DisconnectButtonEnabled = true;
+            ConnectButtonEnabled = true;
         }
 
         protected override void ViewIsDisappearing(object sender, EventArgs e)
         {
             base.ViewIsDisappearing(sender, e);
             timer.Stop();
-           // vpnConnection.DisconnectVpn();
+            // vpnConnection.DisconnectVpn();
         }
 
         #endregion
         private async void CheckVPNStatus(object sender, ElapsedEventArgs e)
         {
-            await vpnConnection.CheckStatusAsync();
-            if (vpnConnection.DaemonStatusModel != null && vpnConnection.DaemonStatusModel.data != null)
+            if (!InProgressOfSendingCommand)
             {
-                Console.WriteLine("STATUS " + vpnConnection.DaemonStatusModel.data.daemon_status);
-                VPNStatus = vpnConnection.DaemonStatusModel.data.daemon_status;
-            }
-            else
-            {
-                Console.WriteLine("DaemonStatusModel or its data is null.");
-                // Handle the case when DaemonStatusModel or its data is null
+                var daemonStatus = await vpnConnection.CheckStatusAsync();
+
+                if (daemonStatus != null)
+                {
+                    if (daemonStatus.status != null && daemonStatus.status.Equals("success"))
+                    {
+                        if (daemonStatus.data != null && daemonStatus.data.daemon_status != null)
+                        {
+                            if (daemonStatus.data.daemon_status.Equals("connected"))
+                            {
+                                IsConnectedToVPN = true;
+                            }
+                            else
+                            {
+                                IsConnectedToVPN = false;
+                            }
+
+                            VPNStatus = daemonStatus.data.daemon_status;
+                        }
+                    }
+                    else if (daemonStatus.message != null)
+                    {
+                        VPNStatus = daemonStatus.message;
+                    }
+                    else
+                    {
+                        Console.WriteLine("DaemonStatus Data is null.");
+                        VPNStatus = "Connection error";
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("DaemonStatus is null.");
+                    VPNStatus = "Connection error";
+                }
             }
         }
 
@@ -60,17 +95,37 @@ namespace CloudflareZTClient.PageModels
             get => this.vpnStatus;
             set
             {
-                this.vpnStatus = "Status: " + value;
+                this.vpnStatus = value;
                 this.RaisePropertyChanged();
             }
         }
 
-        public string VPNConnectionMessage
+        public bool IsConnectedToVPN
         {
-            get => this.vpnConnectionMessage;
+            get => this.isConnectedToVPN;
             set
             {
-                this.vpnConnectionMessage = "Message " + value;
+                this.isConnectedToVPN = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
+        public bool ConnectButtonEnabled
+        {
+            get => this.connectButtonEnabled;
+            set
+            {
+                this.connectButtonEnabled = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
+        public bool DisconnectButtonEnabled
+        {
+            get => this.disconnectButtonEnabled;
+            set
+            {
+                this.disconnectButtonEnabled = value;
                 this.RaisePropertyChanged();
             }
         }
@@ -81,7 +136,7 @@ namespace CloudflareZTClient.PageModels
             {
                 return new Command(async () =>
                 {
-                   await vpnConnection.DisconnectVpnAsync();
+                    await ConnectToVPN(false);
                 });
             }
         }
@@ -92,9 +147,90 @@ namespace CloudflareZTClient.PageModels
             {
                 return new Command(async () =>
                 {
-                   await vpnConnection.ConnectToVpnAsync();
+                    await ConnectToVPN(true);
                 });
             }
+        }
+
+        private async Task ConnectToVPN(bool state)
+        {
+            VPNConnectionService.StatusModel daemonStatus = null;
+            InProgressOfSendingCommand = true;
+            ConnectButtonEnabled = false;
+            DisconnectButtonEnabled = false;
+
+            if (state)
+            {
+                daemonStatus = await vpnConnection.ConnectToVpnAsync();
+            }
+            else
+            {
+                daemonStatus = await vpnConnection.DisconnectVpnAsync();
+            }
+
+            if (daemonStatus != null)
+            {
+                if (daemonStatus.status != null && daemonStatus.status.Equals("success"))
+                {
+                    if (daemonStatus.data != null && daemonStatus.data.daemon_status != null)
+                    {
+                        VPNStatus = daemonStatus.data.daemon_status;
+                    }
+                    IsConnectedToVPN = state;
+                }
+                else
+                {
+                    if (daemonStatus.message != null)
+                    {
+                        VPNStatus = daemonStatus.message;
+                    }
+                }
+            }
+            else
+            {
+                // Handle the case where daemonStatus is null (e.g., a network error occurred)
+                VPNStatus = "Connection error";
+            }
+
+            ConnectButtonEnabled = true;
+            DisconnectButtonEnabled = true;
+            InProgressOfSendingCommand = false;
+        }
+
+
+        private async Task ConnectToVPN()
+        {
+            ConnectButtonEnabled = false;
+            InProgressOfSendingCommand = true;
+
+            // Ensure daemonStatus is not null
+            var daemonStatus = await vpnConnection.ConnectToVpnAsync();
+            if (daemonStatus != null)
+            {
+                if (daemonStatus.status != null && daemonStatus.status.Equals("success"))
+                {
+                    if (daemonStatus.data != null && daemonStatus.data.daemon_status != null)
+                    {
+                        VPNStatus = daemonStatus.data.daemon_status;
+                    }
+                    IsConnectedToVPN = true;
+                }
+                else
+                {
+                    if (daemonStatus.message != null)
+                    {
+                        VPNStatus = daemonStatus.message;
+                    }
+                }
+            }
+            else
+            {
+                // Handle the case where daemonStatus is null (e.g., a network error occurred)
+                VPNStatus = "Connection error";
+            }
+
+            InProgressOfSendingCommand = false;
+            ConnectButtonEnabled = true;
         }
     }
 }

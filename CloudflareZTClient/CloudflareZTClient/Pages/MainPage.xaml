@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="CloudflareZTClient.Pages.MainPage">
+             x:Class="CloudflareZTClient.Pages.MainPage"
+             xmlns:Converters="clr-namespace:CloudflareZTClient.Converters">
 
     <StackLayout>
         <Frame BackgroundColor="#2196F3" Padding="24" CornerRadius="0">
@@ -10,9 +11,18 @@
         <StackLayout HorizontalOptions="Center" Margin="20">
          <Label Text="Mock VPN Client" FontSize="Title" Padding="30,10,30,10"/>
 
-        <Button Text="Connect" Command="{Binding ConnectToVpn}" HeightRequest="50" WidthRequest="50"/>
-         <Label Text="{Binding VPNStatus}"/>
-         <Label Text="{Binding VPNConnectionMessage}"/>
+        <Button Text="Connect" Command="{Binding ConnectToVpn}"
+                HeightRequest="50" WidthRequest="50"
+                TextColor="GreenYellow"
+                IsEnabled="{Binding ConnectButtonEnabled}"
+                IsVisible="{Binding IsConnectedToVPN, Converter={Converters:InverseBoolConverter}}"/>
+         <Button Text="Disconnect" Command="{Binding DisconnectVpn}"
+                HeightRequest="50" WidthRequest="50"
+                TextColor="Red"
+                IsEnabled="{Binding DisconnectButtonEnabled}"
+                IsVisible="{Binding IsConnectedToVPN}"/>
+         <Label Text="{Binding VPNStatus,StringFormat='Connection status:{0}'}" />
+         <!--<Label Text="{Binding VPNConnectionMessage,StringFormat='Error message:{0}'}" TextColor="Red"/>-->
         </StackLayout>
     </StackLayout>
 
