@@ -12,9 +12,9 @@ namespace DarkModeSample.MacOS
         NSWindow window;
         public AppDelegate()
         {
-            var style = NSWindowStyle.Closable | NSWindowStyle.Resizable | NSWindowStyle.Titled;
+            var style = NSWindowStyle.Closable | NSWindowStyle.Titled;
 
-            var rect = new CoreGraphics.CGRect(200, 1000, 1024, 768);
+            var rect = new CoreGraphics.CGRect(200, 1000, 700, 300);
             window = new NSWindow(rect, style, NSBackingStore.Buffered, false);
             window.Title = "CloudfareZTClient";
             window.TitleVisibility = NSWindowTitleVisibility.Hidden;

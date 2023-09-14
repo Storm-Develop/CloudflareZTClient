@@ -27,15 +27,19 @@ namespace CloudflareZTClient.PageModels
             base.ViewIsAppearing(sender, e);
 
             vpnConnection = new VPNConnectionService();
-            await vpnConnection.StartConnectionAsync();
+            await vpnConnection.StartScoketConnectionAsync();
+            await CheckVPNStatus();
 
-            timer = new System.Timers.Timer();
+            timer = new Timer();
+
             // Setting up Timer
             timer.Interval = 5000;
             timer.AutoReset = true;
             timer.Enabled = true;
             timer.Elapsed += CheckVPNStatus;
             timer.Start();
+
+            //Enable connect&disconnect buttons
             DisconnectButtonEnabled = true;
             ConnectButtonEnabled = true;
         }
@@ -44,11 +48,15 @@ namespace CloudflareZTClient.PageModels
         {
             base.ViewIsDisappearing(sender, e);
             timer.Stop();
-            // vpnConnection.DisconnectVpn();
         }
 
         #endregion
         private async void CheckVPNStatus(object sender, ElapsedEventArgs e)
+        {
+            await CheckVPNStatus();
+        }
+
+        private async Task CheckVPNStatus()
         {
             if (!InProgressOfSendingCommand)
             {
@@ -195,42 +203,6 @@ namespace CloudflareZTClient.PageModels
             ConnectButtonEnabled = true;
             DisconnectButtonEnabled = true;
             InProgressOfSendingCommand = false;
-        }
-
-
-        private async Task ConnectToVPN()
-        {
-            ConnectButtonEnabled = false;
-            InProgressOfSendingCommand = true;
-
-            // Ensure daemonStatus is not null
-            var daemonStatus = await vpnConnection.ConnectToVpnAsync();
-            if (daemonStatus != null)
-            {
-                if (daemonStatus.status != null && daemonStatus.status.Equals("success"))
-                {
-                    if (daemonStatus.data != null && daemonStatus.data.daemon_status != null)
-                    {
-                        VPNStatus = daemonStatus.data.daemon_status;
-                    }
-                    IsConnectedToVPN = true;
-                }
-                else
-                {
-                    if (daemonStatus.message != null)
-                    {
-                        VPNStatus = daemonStatus.message;
-                    }
-                }
-            }
-            else
-            {
-                // Handle the case where daemonStatus is null (e.g., a network error occurred)
-                VPNStatus = "Connection error";
-            }
-
-            InProgressOfSendingCommand = false;
-            ConnectButtonEnabled = true;
         }
     }
 }

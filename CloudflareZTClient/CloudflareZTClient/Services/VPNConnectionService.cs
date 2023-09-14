@@ -2,20 +2,21 @@
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using CloudflareZTClient.PageModels;
+using System.Timers;
 using CloudflareZTClient.Services.Interfaces;
 using Newtonsoft.Json;
 using RestSharp;
-using static CloudflareZTClient.Services.VPNConnectionService;
 
 namespace CloudflareZTClient.Services
 {
     public class VPNConnectionService : IVPNConnectionService
     {
         private RestClient _client;
+        private Timer oauthTokenTimer;
         private static string SOCKET_PATH = "/tmp/daemon-lite";
+        private string url = "https://warp-registration.warpdir2792.workers.dev/";
+
         private OauthTokenModel OauthToken;
-        private bool NoErrorContains = true;
         private Socket socketClient;
         private StatusModel daemonStatusModel;
 
@@ -29,6 +30,7 @@ namespace CloudflareZTClient.Services
         }
 
         private string errorMessage;
+        private bool NewAuthTokenRequired;
 
         public string ErrorMessage
         {
@@ -39,25 +41,55 @@ namespace CloudflareZTClient.Services
             }
         }
 
-        private string url = "https://warp-registration.warpdir2792.workers.dev/";
-
-        public async Task<StatusModel> StartConnectionAsync()
+        public async Task StartScoketConnectionAsync()
         {
-            var options = new RestClientOptions(url);
-
+            NewAuthTokenRequired = true;
             _client = new RestClient(url);
-            GetOauthToken();
+            oauthTokenTimer = new Timer();
+
+            // Setting up Timer
+            oauthTokenTimer.Interval = 300000; //5 minutes timer which is in the interval time is 300000
+            oauthTokenTimer.AutoReset = true;
+            oauthTokenTimer.Enabled = false;
+            oauthTokenTimer.Elapsed += UpdateOauthToken;
+            oauthTokenTimer.Start();
+
             await ConnectToSocketAsync();
-            await CheckStatusAsync();
-            return DaemonStatusModel;
+        }
+
+        private void UpdateOauthToken(object sender, ElapsedEventArgs e)
+        {
+            NewAuthTokenRequired = true;
+            oauthTokenTimer.Enabled = false;
         }
 
         public async Task<StatusModel> ConnectToVpnAsync()
         {
-            if (socketClient != null && socketClient.Connected)
+            if(NewAuthTokenRequired)
+            {
+                Console.WriteLine("Requesting a fresh OAuth token.");
+
+                GetOauthToken();
+
+                if (OauthToken.data==null)
+                {
+                    DaemonStatusModel = new StatusModel();
+                    DaemonStatusModel.status = "error";
+                    DaemonStatusModel.message = "An error occurred while retrieving the OAuth token.";
+                    Console.WriteLine("An error occurred while retrieving the OAuth token.");
+                }
+            }
+            if (socketClient != null && socketClient.Connected && OauthToken.data != null)
             {
                 // Send "connect" request
                 await SendRequestAsync(socketClient, new { request = new { connect = OauthToken.data.auth_token } });
+
+                if ((DaemonStatusModel==null || DaemonStatusModel.status.Equals("error")) && NewAuthTokenRequired)
+                {
+                    Console.WriteLine("Keep the same Oauth Token for 5 minutes");
+                    NewAuthTokenRequired = false;
+                    oauthTokenTimer.Enabled = true;
+                }
             }
             else
             {
@@ -66,7 +98,6 @@ namespace CloudflareZTClient.Services
             return DaemonStatusModel;
 
         }
-
 
         public async Task<StatusModel> DisconnectVpnAsync()
         {
@@ -94,6 +125,25 @@ namespace CloudflareZTClient.Services
                 Console.WriteLine("Socket is not connected.");
             }
             return DaemonStatusModel;
+        }
+
+        private void GetOauthToken()
+        {
+            var _restRequest = new RestRequest("", Method.Get);
+            _restRequest.AddHeader("X-Auth-Key", "3735928559");
+
+            var _restResponse = _client.Execute(_restRequest);
+            if (!(_restResponse.Content.Contains("error")))
+            {
+                OauthToken = JsonConvert.DeserializeObject<OauthTokenModel>(_restResponse.Content);
+                Console.WriteLine("**** This is the response **** " + OauthToken.data.auth_token);
+            }
+            else
+            {
+                var errorMessage = "Error" + _restResponse.Content;
+                ErrorMessage = errorMessage;
+                Console.WriteLine(errorMessage);
+            }
         }
 
         private async Task ConnectToSocketAsync()
@@ -140,11 +190,9 @@ namespace CloudflareZTClient.Services
                     // Convert to little-endian if not already
                     Array.Reverse(requestSizeBytes);
                 }
-                Console.WriteLine("Sending payload size: " + requestSize);
 
                 // Sending the request size as 8 bytes to the socket
                 await SendAllAsync(client, requestSizeBytes);
-                Console.WriteLine("Sent payload size.");
 
                 // Then, send the JSON payload to the socket
                 await SendAllAsync(client, Encoding.UTF8.GetBytes(requestJson));
@@ -246,26 +294,6 @@ namespace CloudflareZTClient.Services
             public override string ToString()
             {
                 return $"Daemon Status: {daemon_status}";
-            }
-        }
-
-        private void GetOauthToken()
-        {
-            var _restRequest = new RestRequest("", Method.Get);
-            _restRequest.AddHeader("X-Auth-Key", "3735928559");
-
-            var _restResponse = _client.Execute(_restRequest);
-            if(!(_restResponse.Content.Contains("error")))
-            {
-                OauthToken = JsonConvert.DeserializeObject<OauthTokenModel>(_restResponse.Content);
-                Console.WriteLine("**** This is the response **** " + OauthToken.data.auth_token);
-            }
-            else
-            {
-                NoErrorContains = false;
-                var errorMessage = "Error" + _restResponse.Content;
-                ErrorMessage = errorMessage;
-                Console.WriteLine(errorMessage);
             }
         }
 

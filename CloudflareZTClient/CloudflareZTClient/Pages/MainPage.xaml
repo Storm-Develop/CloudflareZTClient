@@ -21,9 +21,10 @@
                 TextColor="Red"
                 IsEnabled="{Binding DisconnectButtonEnabled}"
                 IsVisible="{Binding IsConnectedToVPN}"/>
-         <Label Text="{Binding VPNStatus,StringFormat='Connection status:{0}'}" />
-         <!--<Label Text="{Binding VPNConnectionMessage,StringFormat='Error message:{0}'}" TextColor="Red"/>-->
         </StackLayout>
+
+        <Label Text="{Binding VPNStatus,StringFormat='Connection status:{0}'}" HorizontalOptions="Center" />
+
     </StackLayout>
 
 </ContentPage>

@@ -1,114 +1,36 @@
-New Frame - {X=0,Y=123,Width=0,Height=0}
-**** This is the response **** 245360175211050
+New Frame - {X=0,Y=97,Width=0,Height=0}
 {"request":"get_status"}
-Sending payload size: 24
-Sent payload size.
 Received response: Status: success, Data: disconnected
+Requesting a fresh OAuth token.
+**** This is the response **** 245360205768342
+{"request":{"connect":245360205768342}}
+Error sending/requesting: Object reference not set to an instance of an object
+Keep the same Oauth Token for 5 minutes
+{"request":{"connect":245360205768342}}
+Received response: Status: success, Data: connected
 {"request":"get_status"}
-Sending payload size: 24
-Sent payload size.
-Received response: Status: success, Data: disconnected
-{"request":"get_status"}
-Sending payload size: 24
-Sent payload size.
-Received response: Status: success, Data: disconnected
-{"request":"get_status"}
-Sending payload size: 24
-Sent payload size.
-Received response: Status: success, Data: disconnected
-{"request":{"connect":245360175211050}}
-Sending payload size: 39
-Sent payload size.
 Received response: Status: success, Data: connected
 {"request":"disconnect"}
-Sending payload size: 24
-Sent payload size.
 Received response: Status: success, Data: disconnected
 {"request":"get_status"}
-Sending payload size: 24
-Sent payload size.
 Received response: Status: success, Data: disconnected
-{"request":{"connect":245360175211050}}
-Sending payload size: 39
-Sent payload size.
-Error sending/requesting: Object reference not set to an instance of an object
-{"request":{"connect":245360175211050}}
-Sending payload size: 39
-Sent payload size.
+{"request":{"connect":245360205768342}}
 Received response: Status: success, Data: connected
 {"request":"get_status"}
-Sending payload size: 24
-Sent payload size.
-Received response: Status: success, Data: connected
-{"request":"get_status"}
-Sending payload size: 24
-Sent payload size.
-Error sending/requesting: Object reference not set to an instance of an object
-{"request":"get_status"}
-Sending payload size: 24
-Sent payload size.
-Received response: Status: success, Data: connected
-{"request":"get_status"}
-Sending payload size: 24
-Sent payload size.
-Received response: Status: success, Data: disconnected
-{"request":"get_status"}
-Sending payload size: 24
-Sent payload size.
-Received response: Status: success, Data: disconnected
-{"request":"get_status"}
-Sending payload size: 24
-Sent payload size.
-Received response: Status: success, Data: disconnected
-{"request":"get_status"}
-Sending payload size: 24
-Sent payload size.
-Received response: Status: success, Data: disconnected
-{"request":{"connect":245360175211050}}
-Sending payload size: 39
-Sent payload size.
-Received response: Status: success, Data: connected
-{"request":"get_status"}
-Sending payload size: 24
-Sent payload size.
-Error sending/requesting: Object reference not set to an instance of an object
-{"request":"get_status"}
-Sending payload size: 24
-Sent payload size.
 Received response: Status: success, Data: connected
 {"request":"disconnect"}
-Sending payload size: 24
-Sent payload size.
 Received response: Status: success, Data: disconnected
 {"request":"get_status"}
-Sending payload size: 24
-Sent payload size.
-Received response: Status: success, Data: disconnected
-{"request":"get_status"}
-Sending payload size: 24
-Sent payload size.
 Error sending/requesting: Object reference not set to an instance of an object
+{"request":{"connect":245360205768342}}
+Received response: Status: success, Data: connected
 {"request":"get_status"}
-Sending payload size: 24
-Sent payload size.
-Error sending/requesting: Object reference not set to an instance of an object
-{"request":"get_status"}
-Sending payload size: 24
-Sent payload size.
 Received response: Status: success, Data: disconnected
-{"request":"get_status"}
-Sending payload size: 24
-Sent payload size.
+{"request":"disconnect"}
 Received response: Status: success, Data: disconnected
+{"request":{"connect":245360205768342}}
+Received response: Status: success, Data: connected
 {"request":"get_status"}
-Sending payload size: 24
-Sent payload size.
+Received response: Status: success, Data: connected
+{"request":"disconnect"}
 Received response: Status: success, Data: disconnected
-{"request":"get_status"}
-Sending payload size: 24
-Sent payload size.
-Received response: Status: success, Data: disconnected
-{"request":"get_status"}
-Sending payload size: 24
-Sent payload size.
-Error sending/requesting: Object reference not set to an instance of an object
