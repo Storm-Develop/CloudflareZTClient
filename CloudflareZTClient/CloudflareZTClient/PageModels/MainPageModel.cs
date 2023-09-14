@@ -2,9 +2,6 @@
 using CloudflareZTClient.Services;
 using FreshMvvm;
 using System;
-using System.Collections.Generic;
-using System.Net.NetworkInformation;
-using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using Xamarin.Forms;
