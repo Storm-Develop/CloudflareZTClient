@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using CloudflareZTClient.PageModels;
 using CloudflareZTClient.Services.Interfaces;
 using Newtonsoft.Json;
 using RestSharp;
-using RestSharp.Authenticators;
-using RestSharp.Authenticators.OAuth2;
-using System.Net.Sockets;
+using static CloudflareZTClient.Services.VPNConnectionService;
 
 namespace CloudflareZTClient.Services
 {
@@ -18,48 +16,80 @@ namespace CloudflareZTClient.Services
         private static string SOCKET_PATH = "/tmp/daemon-lite";
         private OauthTokenModel OauthToken;
         private bool NoErrorContains = true;
+        private Socket socketClient;
+        private StatusModel daemonStatusModel;
 
-        string url = "https://warp-registration.warpdir2792.workers.dev/";
-        //"https://vladsamonintest.api.openvpn.com/api/beta/oauth/token?clientid=EHMG4dgdHZZZ09JQLFxj07rVL4jPGvvr.vladsamonintest&client_secret=Vr7xbZpjed3lXrPD3UP1FaMTjsZHwbGlxDyqTKdMvatHmAlm0bSRkrdfgDg3ziK4&grant_type=client_credentials"
-        // string url = "https://vladsamonintest.api.openvpn.com/api/beta/oauth/token?client_id=EHMG4dgdHZZZ09JQLFxj07rVL4jPGvvr.vladsamonintest&client_secret=Vr7xbZpjed3lXrPD3UP1FaMTjsZHwbGlxDyqTKdMvatHmAlm0bSRkrdfgDg3ziK4&grant_type=client_credentials";
-        public void StartConnection()
+        public StatusModel DaemonStatusModel
+        {
+            get => this.daemonStatusModel;
+            private set
+            {
+                this.daemonStatusModel = value;
+            }
+        }
+        private string url = "https://warp-registration.warpdir2792.workers.dev/";
+
+        public async Task StartConnectionAsync()
         {
             var options = new RestClientOptions(url);
 
             _client = new RestClient(url);
             GetOauthToken();
-            if(NoErrorContains)
+            if (NoErrorContains)
             {
-                ConnectToSocket();
+                await ConnectToSocketAsync();
             }
-            //var response = await _client.ExecuteAsync(request, cancellationToken);
-            // SimpleGetRequestTest();
-            /*    var restRequest = new RestRequest("/api/beta/regions", Method.Get);
-
-                var result = _client.GetRequestQuery(restRequest);*/
-            //var response = await _client.GetJsonAsync<TResponse>("endpoint?foo=bar", cancellationToken);
+            //CheckStatus();
         }
 
-        private async void ConnectToSocket()
+        public async Task ConnectToVpnAsync()
+        {
+            if (socketClient != null && socketClient.Connected)
+            {
+                // Send "connect" request
+                await SendRequestAsync(socketClient, new { request = new { connect = OauthToken.data.auth_token } });
+            }
+            else
+            {
+                Console.WriteLine("Socket is not connected.");
+            }
+        }
+
+
+        public async Task DisconnectVpnAsync()
+        {
+            if (socketClient != null && socketClient.Connected)
+            {
+                // Send "disconnect" request
+                await SendRequestAsync(socketClient, new { request = "disconnect" });
+            }
+            else
+            {
+                Console.WriteLine("Socket is not connected.");
+            }
+        }
+
+        public async Task CheckStatusAsync()
+        {
+            if (socketClient != null && socketClient.Connected)
+            {
+                // Send "get_connect" request
+                await SendRequestAsync(socketClient, new { request = "get_status" });
+            }
+            else
+            {
+                Console.WriteLine("Socket is not connected.");
+            }
+        }
+
+        private async Task ConnectToSocketAsync()
         {
             try
             {
-                using (var client = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.Unspecified))
-                {
-                    // Platform-specific code to set up the Unix domain socket connection
-                    // You may need to implement this differently for Android and iOS
-                    var endpoint = new UnixEndPoint(SOCKET_PATH);
-                    client.Connect(endpoint);
-
-                    // Send "get_connect" request
-                    await SendRequestAsync(client, new { request = "get_status" });
-
-                    // Send "connect" request
-                    await SendRequestAsync(client, new { request = new { connect = OauthToken.data.auth_token } });
-
-                    // Send "get_connect" request
-                    await SendRequestAsync(client, new { request = "get_status" });
-                }
+                socketClient = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.Unspecified);
+                // Set up the Unix domain socket connection
+                var endpoint = new UnixEndPoint(SOCKET_PATH);
+                await socketClient.ConnectAsync(endpoint);
             }
             catch (Exception e)
             {
@@ -133,8 +163,8 @@ namespace CloudflareZTClient.Services
                 string recv_payload_json = Encoding.UTF8.GetString(recv_payload_json_bytes);
 
                 // Deserialize the JSON payload into a C# object; this is the response
-                var recv_payload = System.Text.Json.JsonSerializer.Deserialize<ResponseModel>(recv_payload_json);
-
+                var recv_payload = System.Text.Json.JsonSerializer.Deserialize<StatusModel>(recv_payload_json);
+                DaemonStatusModel = recv_payload;
                 Console.WriteLine("Received response: " + recv_payload);
             }
             catch (Exception ex)
@@ -142,6 +172,8 @@ namespace CloudflareZTClient.Services
                 Console.WriteLine("Error sending/requesting: " + ex.Message);
             }
         }
+
+
 
         private async Task SendAllAsync(Socket socket, byte[] data)
         {
@@ -153,7 +185,6 @@ namespace CloudflareZTClient.Services
                     new ArraySegment<byte>(data, totalBytesSent, data.Length - totalBytesSent),
                     SocketFlags.None
                 );
-                Console.WriteLine("BytesSent " + bytesSent + " Total Bytes" + totalBytesSent);
 
                 if (bytesSent == 0)
                 {
@@ -182,7 +213,7 @@ namespace CloudflareZTClient.Services
             return buffer;
         }
 
-        public class ResponseModel
+        public class StatusModel
         {
             public string status { get; set; }
             public DataModel data { get; set; }
@@ -202,7 +233,8 @@ namespace CloudflareZTClient.Services
                 return $"Daemon Status: {daemon_status}";
             }
         }
-        public void GetOauthToken()
+
+        private void GetOauthToken()
         {
             var _restRequest = new RestRequest("", Method.Get);
             _restRequest.AddHeader("X-Auth-Key", "3735928559");

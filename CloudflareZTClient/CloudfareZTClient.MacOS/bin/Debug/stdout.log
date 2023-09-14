@@ -1,19 +1,122 @@
-**** This is the response **** 245360112735089
+**** This is the response **** 245360139762422
 {"request":"get_status"}
 Sending payload size: 24
-BytesSent 8 Total Bytes0
 Sent payload size.
-BytesSent 24 Total Bytes0
 Received response: Status: success, Data: disconnected
-{"request":{"connect":245360112735089}}
-Sending payload size: 39
-BytesSent 8 Total Bytes0
-Sent payload size.
-BytesSent 39 Total Bytes0
-Received response: Status: success, Data: connected
+STATUS disconnected
 {"request":"get_status"}
 Sending payload size: 24
-BytesSent 8 Total Bytes0
 Sent payload size.
-BytesSent 24 Total Bytes0
+Received response: Status: success, Data: disconnected
+STATUS disconnected
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+Received response: Status: success, Data: disconnected
+STATUS disconnected
+{"request":{"connect":245360139762422}}
+Sending payload size: 39
+Sent payload size.
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+Error sending/requesting: The JSON value could not be converted to CloudflareZTClient.Services.VPNConnectionService+StatusModel. Path: $ | LineNumber: 0 | BytePositionInLine: 3.
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+Received response: Status: success, Data: disconnected
+STATUS disconnected
+{"request":{"connect":245360139762422}}
+Sending payload size: 39
+Sent payload size.
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+Error sending/requesting: Expected end of string, but instead reached end of data. Path: $.message | LineNumber: 0 | BytePositionInLine: 60.
+STATUS disconnected
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+{"request":{"connect":245360139762422}}
+Sending payload size: 39
+Sent payload size.
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
 Received response: Status: success, Data: connected
+STATUS connected
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+Error sending/requesting: '9' is invalid after a single JSON value. Expected end of data. Path: $ | LineNumber: 0 | BytePositionInLine: 57.
+STATUS connected
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+Received response: Status: success, Data: connected
+STATUS connected
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+Error sending/requesting: Object reference not set to an instance of an object
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+Error sending/requesting: Expected end of string, but instead reached end of data. Path: $.data.daemon_status | LineNumber: 0 | BytePositionInLine: 57.
+DaemonStatusModel or its data is null.
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+Error sending/requesting: Expected end of string, but instead reached end of data. Path: $.data.message | LineNumber: 0 | BytePositionInLine: 72.
+DaemonStatusModel or its data is null.
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+Error sending/requesting: 'g' is an invalid start of a value. Path: $ | LineNumber: 0 | BytePositionInLine: 0.
+DaemonStatusModel or its data is null.
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+Received response: Status: success, Data: disconnected
+STATUS disconnected
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+{"request":"get_status"}
+Sending payload size: 24
+Sent payload size.
+Received response: Status: success, Data: disconnected
+STATUS disconnected

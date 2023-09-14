@@ -1,35 +1,43 @@
 ﻿<Properties StartupConfiguration="{016950E9-CBC7-4A2B-8AEC-1669ECE827B9}|Default">
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <Debugger.DebugSourceFolders>
-    <String>/Users/home/Documents/GitHub/CloudflareZTClient/CloudflareZTClient</String>
-  </Debugger.DebugSourceFolders>
-  <MonoDevelop.Ide.ItemProperties.CloudfareZTClient.MacOS PreferredExecutionTarget="MyMacID" />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="CloudflareZTClient/Services/VPNConnectionService.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="CloudflareZTClient/PageModels/MainPageModel.cs">
     <Files>
       <File FileName="CloudfareZTClient.MacOS/AppDelegate.cs" />
-      <File FileName="CloudflareZTClient/Pages/MainPage.xaml" />
-      <File FileName="CloudflareZTClient/Services/VPNConnectionService.cs" Line="52" Column="1" />
-      <File FileName="CloudfareZTClient.MacOS/Main.cs" Line="10" Column="20" />
-      <File FileName="CloudflareZTClient/PageModels/MainPageModel.cs" />
+      <File FileName="CloudflareZTClient/Pages/MainPage.xaml" Line="17" Column="1" />
+      <File FileName="CloudflareZTClient/Services/VPNConnectionService.cs" Line="39" Column="52" />
+      <File FileName="CloudfareZTClient.MacOS/Main.cs" />
+      <File FileName="CloudflareZTClient/PageModels/MainPageModel.cs" Line="18" Column="45" />
+      <File FileName="CloudflareZTClient/Services/UnixSocket.cs" Line="40" Column="34" />
+      <File FileName="CloudflareZTClient/App.xaml" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="CloudflareZTClient" expanded="True" selected="True">
+          <Node name="CloudflareZTClient" expanded="True">
+            <Node name="CloudfareZTClient.MacOS" expanded="True" />
             <Node name="CloudflareZTClient">
-              <Node name="Services" expanded="True" />
+              <Node name="PageModels" expanded="True">
+                <Node name="MainPageModel.cs" selected="True" />
+              </Node>
+              <Node name="Pages" expanded="True" />
+              <Node name="Services" expanded="True">
+                <Node name="Interfaces" expanded="True" />
+              </Node>
             </Node>
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.CloudfareZTClient.MacOS PreferredExecutionTarget="MyMacID" />
+  <Debugger.DebugSourceFolders>
+    <String>/Users/home/Documents/GitHub/CloudflareZTClient/CloudflareZTClient</String>
+  </Debugger.DebugSourceFolders>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/Users/home/Documents/GitHub/CloudflareZTClient/CloudflareZTClient/CloudflareZTClient/Services/VPNConnectionService.cs" relfile="CloudflareZTClient/Services/VPNConnectionService.cs" line="54" column="1" />
-      <Breakpoint file="/Users/home/Documents/GitHub/CloudflareZTClient/CloudflareZTClient/CloudflareZTClient/Services/VPNConnectionService.cs" relfile="CloudflareZTClient/Services/VPNConnectionService.cs" line="52" column="13" />
+      <Breakpoint file="/Users/home/Documents/GitHub/CloudflareZTClient/CloudflareZTClient/CloudflareZTClient/Services/VPNConnectionService.cs" relfile="CloudflareZTClient/Services/VPNConnectionService.cs" line="211" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>
