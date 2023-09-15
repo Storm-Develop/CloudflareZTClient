@@ -9,7 +9,7 @@
     using NUnit.Framework;
 
     /// <summary>
-    ///  Nunit tests for the main page.
+    /// Nunit tests for the main page.
     /// Note: unit tests names describe what's tests are preforming to do.
     /// </summary>
     public class MainPageModelTest

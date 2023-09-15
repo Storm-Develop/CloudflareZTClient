@@ -19,7 +19,7 @@
     <DeployOptionalPackages>false</DeployOptionalPackages>
     <WindowsSdkPath>C:\Program Files %28x86%29\Windows Kits\10\</WindowsSdkPath>
     <LayoutDir>C:\Users\Work\Documents\GitHub\CloudflareZTClient\CloudflareZTClient\CloudflareZTClient.UWP\bin\x86\Debug\AppX</LayoutDir>
-    <RegisteredManifestChecksum>47945D9ABDF4AC702C0DA8095F225EC919AE3763CD9B730D7A3EA07E52341EE6</RegisteredManifestChecksum>
+    <RegisteredManifestChecksum>DE62111C46E0576C828A36ED19AEAA767E38E506D55211EF5F8C0930613B7A0B</RegisteredManifestChecksum>
     <RegisteredPackageMoniker>f609f3d2-0f1b-4ee5-9dcd-d0bde0126bd2_1.0.0.0_x86__bha32rbedvddr</RegisteredPackageMoniker>
     <RegisteredUserModeAppID>f609f3d2-0f1b-4ee5-9dcd-d0bde0126bd2_bha32rbedvddr!App</RegisteredUserModeAppID>
     <RegisteredPackageID>f609f3d2-0f1b-4ee5-9dcd-d0bde0126bd2</RegisteredPackageID>
@@ -30,13 +30,13 @@
     <AppXManifest Include="C:\Users\Work\Documents\GitHub\CloudflareZTClient\CloudflareZTClient\CloudflareZTClient.UWP\bin\x86\Debug\Core\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2023-09-13T02:18:11.680</Modified>
+      <Modified>2023-09-15T00:00:52.636</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="C:\Users\Work\Documents\GitHub\CloudflareZTClient\CloudflareZTClient\CloudflareZTClient.UWP\bin\x86\Debug\CloudflareZTClient.UWP.exe">
       <PackagePath>entrypoint\CloudflareZTClient.UWP.exe</PackagePath>
-      <Modified>2023-09-13T02:18:10.964</Modified>
+      <Modified>2023-09-15T00:00:50.601</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Work\.nuget\packages\freshmvvm\4.0.1\lib\netstandard2.0\FreshIOC.dll">
       <PackagePath>FreshIOC.dll</PackagePath>
@@ -104,7 +104,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Work\Documents\GitHub\CloudflareZTClient\CloudflareZTClient\CloudflareZTClient\bin\Debug\netstandard2.0\CloudflareZTClient.dll">
       <PackagePath>CloudflareZTClient.dll</PackagePath>
-      <Modified>2023-09-13T03:44:43.338</Modified>
+      <Modified>2023-09-15T00:00:45.866</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Work\.nuget\packages\win2d.uwp\1.20.0\lib\uap10.0\Microsoft.Graphics.Canvas.winmd">
       <PackagePath>Microsoft.Graphics.Canvas.winmd</PackagePath>
@@ -263,11 +263,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Work\Documents\GitHub\CloudflareZTClient\CloudflareZTClient\CloudflareZTClient.UWP\bin\x86\Debug\App.xbf">
       <PackagePath>App.xbf</PackagePath>
-      <Modified>2023-09-13T02:18:10.922</Modified>
+      <Modified>2023-09-15T00:00:50.542</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Work\Documents\GitHub\CloudflareZTClient\CloudflareZTClient\CloudflareZTClient.UWP\bin\x86\Debug\MainPage.xbf">
       <PackagePath>MainPage.xbf</PackagePath>
-      <Modified>2023-09-13T02:18:10.922</Modified>
+      <Modified>2023-09-15T00:00:50.542</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.UniversalCRT.Debug\10.0.22621.0\\redist\Debug\x86\ucrtbased.dll">
       <PackagePath>ucrtbased.dll</PackagePath>
@@ -283,11 +283,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Work\Documents\GitHub\CloudflareZTClient\CloudflareZTClient\CloudflareZTClient.UWP\bin\x86\Debug\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2023-09-13T00:27:34.123</Modified>
+      <Modified>2023-09-15T00:00:51.343</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Work\Documents\GitHub\CloudflareZTClient\CloudflareZTClient\CloudflareZTClient.UWP\bin\x86\Debug\Core\CloudflareZTClient.UWP.exe">
       <PackagePath>CloudflareZTClient.UWP.exe</PackagePath>
-      <Modified>2023-09-13T02:18:11.674</Modified>
+      <Modified>2023-09-15T00:00:52.633</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>
