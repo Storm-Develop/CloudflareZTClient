@@ -1,6 +1,8 @@
-﻿using System;
-namespace CloudflareZTClient.Models
+﻿namespace CloudflareZTClient.Models
 {
+    /// <summary>
+    /// Helper class to get daemon status.
+    /// </summary>
     public class DaemonDataModel
     {
         public string daemon_status { get; set; }
@@ -11,4 +13,3 @@ namespace CloudflareZTClient.Models
         }
     }
 }
-

@@ -1,1 +1,0 @@
-C:\Users\Work\Documents\GitHub\CloudflareZTClient\CloudflareZTClient\CloudflareZTClient.UWP\CloudflareZTClient.UWP.csproj;x86

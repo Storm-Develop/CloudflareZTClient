@@ -11,6 +11,10 @@
     {
         #region IValueConverter Members
 
+        /// <summary>
+        /// Inversing the boolean based on the input.
+        /// </summary>
+        /// <returns>Converted boolean.</returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return !((bool)value);
@@ -24,4 +28,3 @@
         #endregion
     }
 }
-

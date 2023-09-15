@@ -1,26 +1,53 @@
-﻿using System;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
-using CloudflareZTClient.Models;
-using CloudflareZTClient.Services.Interfaces;
-using Newtonsoft.Json;
-using RestSharp;
-
-namespace CloudflareZTClient.Services
+﻿namespace CloudflareZTClient.Services
 {
+    using System;
+    using System.Net.Sockets;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Timers;
+    using CloudflareZTClient.Models;
+    using CloudflareZTClient.Services.Helper;
+    using CloudflareZTClient.Services.Interfaces;
+    using Newtonsoft.Json;
+    using RestSharp;
+
+    /// <summary>
+    /// VPN Connection service which is used to communicate to the daemon server.
+    /// </summary>
     public class VPNConnectionService : IVPNConnectionService
     {
-        private RestClient _client;
-        private Timer oauthTokenTimer;
-        private static string SOCKET_PATH = "/tmp/daemon-lite";
-        private string url = "https://warp-registration.warpdir2792.workers.dev/";
+        // Rest client used to communicate with cloudfare server to get the ouath token.
+        private RestClient restClient;
 
+        // Ouath token timer which is used to generate the new ouath token.
+        private Timer oauthTokenTimer;
+
+        private static string SOCKET_PATH = "/tmp/daemon-lite";
+
+        // Url used for grabbing the oauth token.
+        private string cloudfareOuathUrl = "https://warp-registration.warpdir2792.workers.dev/";
+
+        // Ouath token.
         private OauthTokenModel OauthToken;
+
+        // Socket client to communicate with the server.
         private Socket socketClient;
+
+        // Daemon status model.
         private StatusModel daemonStatusModel;
 
+        // Ouath error message.
+        private string oauthErrorMessage;
+
+        // Boolean indicating if new ouath token is required to be generated.
+        private bool NewOauthTokenRequired;
+
+        // Rest request used by rest client to generate new oauth token.
+        private RestRequest restRequest;
+
+        /// <summary>
+        /// Status model contains the information from the server;
+        /// </summary>
         public StatusModel DaemonStatusModel
         {
             get => this.daemonStatusModel;
@@ -30,131 +57,171 @@ namespace CloudflareZTClient.Services
             }
         }
 
-        private string errorMessage;
-        private bool NewAuthTokenRequired;
-
-        public string ErrorMessage
+        /// <summary>
+        /// Shows the error on ouath token request in case it happens.
+        /// </summary>
+        public string OauthErrorMessage
         {
-            get => this.errorMessage;
+            get => this.oauthErrorMessage;
             private set
             {
-                this.errorMessage = value;
+                this.oauthErrorMessage = value;
             }
         }
 
-        public async Task StartScoketConnectionAsync()
+        /// <summary>
+        /// Start socket connection, rest client & timer upon first launch of the app.
+        /// </summary>
+        /// <returns></returns>
+        public async Task StartSocketConnectionAsync()
         {
-            NewAuthTokenRequired = true;
-            _client = new RestClient(url);
-            oauthTokenTimer = new Timer();
+            this.NewOauthTokenRequired = true;
+            this.restClient = new RestClient(cloudfareOuathUrl);
+            this.oauthTokenTimer = new Timer();
 
             // Setting up Timer
-            oauthTokenTimer.Interval = 300000; //5 minutes timer which is in the interval time is 300000
-            oauthTokenTimer.AutoReset = true;
-            oauthTokenTimer.Enabled = false;
-            oauthTokenTimer.Elapsed += UpdateOauthToken;
-            oauthTokenTimer.Start();
+            this.oauthTokenTimer.Interval = 300000; // 5 minutes timer which is in the interval time is 300000
+            this.oauthTokenTimer.AutoReset = true;
+            this.oauthTokenTimer.Enabled = false;
+            this.oauthTokenTimer.Elapsed += UpdateOauthTokenFlags;
+            this.oauthTokenTimer.Start();
 
             await ConnectToSocketAsync();
         }
 
-        private void UpdateOauthToken(object sender, ElapsedEventArgs e)
+        /// <summary>
+        /// Updating Oauth token flags to make sure when 5 minutes are passed the new token is going to be generated on a new connection requst.
+        /// </summary>
+        private void UpdateOauthTokenFlags(object sender, ElapsedEventArgs e)
         {
-            NewAuthTokenRequired = true;
-            oauthTokenTimer.Enabled = false;
+            this.NewOauthTokenRequired = true;
+            this.oauthTokenTimer.Enabled = false;
         }
 
+        /// <summary>
+        /// Sending connect request to the server.
+        /// </summary>
+        /// <returns>StatusModel containing the infromation from the server.</returns>
         public async Task<StatusModel> ConnectToVpnAsync()
         {
-            if(NewAuthTokenRequired)
+            // Checking if the new oauth token required.
+            if (this.NewOauthTokenRequired)
             {
                 Console.WriteLine("Requesting a fresh OAuth token.");
 
                 GetOauthToken();
 
-                if (OauthToken.data==null)
+                // In rare cases it could fail to get oauth token from the server, in order to cover it generating proper status model.
+                if (this.OauthToken.data == null)
                 {
-                    DaemonStatusModel = new StatusModel();
-                    DaemonStatusModel.status = "error";
-                    DaemonStatusModel.message = "An error occurred while retrieving the OAuth token.";
+                    this.DaemonStatusModel = new StatusModel();
+                    this.DaemonStatusModel.status = "error";
+                    this.DaemonStatusModel.message = "An error occurred while retrieving the OAuth token.";
                     Console.WriteLine("An error occurred while retrieving the OAuth token.");
                 }
             }
-            if (socketClient != null && socketClient.Connected && OauthToken.data != null)
+
+            if (this.socketClient != null && this.socketClient.Connected && this.OauthToken.data != null)
             {
                 // Send "connect" request
-                await SendRequestAsync(socketClient, new { request = new { connect = OauthToken.data.auth_token } });
+                await SendRequestAsync(this.socketClient, new { request = new { connect = this.OauthToken.data.auth_token } });
 
-                if ((DaemonStatusModel==null || DaemonStatusModel.status.Equals("error")) && NewAuthTokenRequired)
+                // If connection to the server fails and if the new token required than we make sure that we keep the token and refresh it after 5 minutes.
+                // Note new token may not be required if the client fails e.g twice to connect to the server and we already have the token to be refreshed.
+                // Also it's going to refresh a token when 5 minutes are passed and user tries to connect again.
+                if ((this.DaemonStatusModel ==null || this.DaemonStatusModel.status.Equals("error")) && this.NewOauthTokenRequired)
                 {
                     Console.WriteLine("Keep the same Oauth Token for 5 minutes");
-                    NewAuthTokenRequired = false;
-                    oauthTokenTimer.Enabled = true;
+                    this.NewOauthTokenRequired = false;
+                    this.oauthTokenTimer.Enabled = true;
                 }
             }
             else
             {
                 Console.WriteLine("Socket is not connected.");
             }
-            return DaemonStatusModel;
 
+            return this.DaemonStatusModel;
         }
 
+        /// <summary>
+        /// Sending disconnect request to the server.
+        /// </summary>
+        /// <returns>StatusModel containing the infromation from the server.</returns>
         public async Task<StatusModel> DisconnectVpnAsync()
         {
-            if (socketClient != null && socketClient.Connected)
+            if (this.socketClient != null && this.socketClient.Connected)
             {
                 // Send "disconnect" request
-                await SendRequestAsync(socketClient, new { request = "disconnect" });
+                await SendRequestAsync(this.socketClient, new { request = "disconnect" });
             }
             else
             {
                 Console.WriteLine("Socket is not connected.");
             }
-            return DaemonStatusModel;
+
+            return this.DaemonStatusModel;
         }
 
+        /// <summary>
+        /// Checking the status of the daemon server by sending "get_status" request.
+        /// </summary>
+        /// <returns>StatusModel containing the infromation from the server.</returns>
         public async Task<StatusModel> CheckStatusAsync()
         {
-            if (socketClient != null && socketClient.Connected)
+            if (this.socketClient != null && this.socketClient.Connected)
             {
                 // Send "get_connect" request
-                await SendRequestAsync(socketClient, new { request = "get_status" });
+                await SendRequestAsync(this.socketClient, new { request = "get_status" });
             }
             else
             {
                 Console.WriteLine("Socket is not connected.");
             }
-            return DaemonStatusModel;
+
+            return this.DaemonStatusModel;
         }
 
+        /// <summary>
+        /// Getting the oauth token by sending REST API Call to the cloudfare server.
+        /// </summary>
         private void GetOauthToken()
         {
-            var _restRequest = new RestRequest("", Method.Get);
-            _restRequest.AddHeader("X-Auth-Key", "3735928559");
+            this.restRequest = new RestRequest(string.Empty, Method.Get);
 
-            var _restResponse = _client.Execute(_restRequest);
-            if (!(_restResponse.Content.Contains("error")))
+            // Using a header provided on the assignment.
+            this.restRequest.AddHeader("X-Auth-Key", "3735928559");
+
+            var restResponse = this.restClient.Execute(this.restRequest);
+            if (!restResponse.Content.Contains("error"))
             {
-                OauthToken = JsonConvert.DeserializeObject<OauthTokenModel>(_restResponse.Content);
-                Console.WriteLine("**** This is the response **** " + OauthToken.data.auth_token);
+                // Deserialize object to receive oauth token.
+                this.OauthToken = JsonConvert.DeserializeObject<OauthTokenModel>(restResponse.Content);
+                Console.WriteLine("**** This is the response **** " + this.OauthToken.data.auth_token);
             }
             else
             {
-                var errorMessage = "Error" + _restResponse.Content;
-                ErrorMessage = errorMessage;
+                var errorMessage = "Error" + restResponse.Content;
+                this.OauthErrorMessage = errorMessage;
                 Console.WriteLine(errorMessage);
             }
         }
 
+        /// <summary>
+        /// Connecting to the socket to communicate with the daemon server.
+        /// </summary>
         private async Task ConnectToSocketAsync()
         {
             try
             {
-                socketClient = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.Unspecified);
+                // Constructing socket client.
+                this.socketClient = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.Unspecified);
+
                 // Set up the Unix domain socket connection
                 var endpoint = new UnixEndPoint(SOCKET_PATH);
-                await socketClient.ConnectAsync(endpoint);
+
+                //Connect to the socket to the given ednpoint
+                await this.socketClient.ConnectAsync(endpoint);
             }
             catch (Exception e)
             {
@@ -162,6 +229,9 @@ namespace CloudflareZTClient.Services
             }
         }
 
+        /// <summary>
+        /// Send request to the server is used to send all commands and retrieve the response from the server.
+        /// </summary>
         private async Task SendRequestAsync(Socket client, object requestObject)
         {
             try
@@ -227,7 +297,9 @@ namespace CloudflareZTClient.Services
 
                 // Deserialize the JSON payload into a C# object; this is the response
                 var recv_payload = System.Text.Json.JsonSerializer.Deserialize<StatusModel>(recv_payload_json);
-                DaemonStatusModel = recv_payload;
+
+                // Setting Daemon status model to be used later.
+                this.DaemonStatusModel = recv_payload;
                 Console.WriteLine("Received response: " + recv_payload);
             }
             catch (Exception ex)
@@ -236,8 +308,9 @@ namespace CloudflareZTClient.Services
             }
         }
 
-
-
+        /// <summary>
+        /// Helper function which is sending an array of bytes to the server through the socket.
+        /// </summary>
         private async Task SendAllAsync(Socket socket, byte[] data)
         {
             int totalBytesSent = 0;
@@ -258,6 +331,9 @@ namespace CloudflareZTClient.Services
             }
         }
 
+        /// <summary>
+        /// Helper function which is getting the list of bytes received from the server.
+        /// </summary>
         private async Task<byte[]> ReceiveAllAsync(Socket socket, int length)
         {
             byte[] buffer = new byte[length];

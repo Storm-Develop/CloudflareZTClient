@@ -1,21 +1,30 @@
-﻿using CloudflareZTClient.PageModels;
-using FreshMvvm;
-using System;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
-
-namespace CloudflareZTClient
+﻿namespace CloudflareZTClient
 {
+    using CloudflareZTClient.PageModels;
+    using CloudflareZTClient.Services;
+    using CloudflareZTClient.Services.Interfaces;
+    using FreshMvvm;
+    using Xamarin.Forms;
+
     public partial class App : Application
     {
         public App()
         {
             InitializeComponent();
 
-            // Setting MainPage for the Application  
+            // Setting MainPage for the Application
+            InitializeDependencyInjection();
             var page = FreshPageModelResolver.ResolvePageModel<MainPageModel>();
             var basicNavContainer = new FreshNavigationContainer(page);
             MainPage = basicNavContainer;
+        }
+
+        /// <summary>
+        /// Initialize vpn connection service which is going to be used at the main page model.
+        /// </summary>
+        private void InitializeDependencyInjection()
+        {
+            FreshIOC.Container.Register<IVPNConnectionService, VPNConnectionService>();
         }
 
         protected override void OnStart()

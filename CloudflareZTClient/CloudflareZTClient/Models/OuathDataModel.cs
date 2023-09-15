@@ -1,5 +1,8 @@
 ﻿namespace CloudflareZTClient.Models
 {
+    /// <summary>
+    /// Helper class which contains auth token.
+    /// </summary>
     public class OuathDataModel
     {
         public long auth_token { get; set; }
@@ -10,4 +13,3 @@
         }
     }
 }
-

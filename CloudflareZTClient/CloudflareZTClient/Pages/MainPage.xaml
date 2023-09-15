@@ -16,6 +16,7 @@
                 TextColor="GreenYellow"
                 IsEnabled="{Binding ConnectButtonEnabled}"
                 IsVisible="{Binding IsConnectedToVPN, Converter={Converters:InverseBoolConverter}}"/>
+            
          <Button Text="Disconnect" Command="{Binding DisconnectVpn}"
                 HeightRequest="50" WidthRequest="50"
                 TextColor="Red"
