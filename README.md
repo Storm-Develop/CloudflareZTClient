@@ -15,15 +15,6 @@ You can download the app package [here](https://github.com/Storm-Develop/Cloudfl
 Once downloaded and unpacked zip file. Navigate to Privacy&Security and in the Security section select AppStore and identified developers. Below there should be an option to open the CloudFareZTclient app.
 ![Image](https://github.com/Storm-Develop/CloudflareZTClient/blob/dev/ImagesUsedInReadme/photo_2023-09-14_20-30-13.jpg)
 
-## GUI Overview
-[![GUI Overview](https://github.com/Storm-Develop/CloudflareZTClient/blob/dev/ImagesUsedInReadme/Screenshot%202023-09-14%20221133.png)](https://youtu.be/7GnAxm0GyOI)
-
-## Project Overview
-[![Project Overview](https://github.com/Storm-Develop/CloudflareZTClient/blob/dev/ImagesUsedInReadme/Screenshot%202023-09-14%20221414.png)](https://youtu.be/LxsakqWPrT4?si=IFrQG-AeT6gQ6tvb)
-
-## Unit Test Overview
-[![Unit Test Overview](https://github.com/Storm-Develop/CloudflareZTClient/blob/dev/ImagesUsedInReadme/Screenshot%202023-09-14%20221259.png)](https://youtu.be/anQMeQBaoao)
-
 ## Compilation
 In order to compile the project you can use Visual Studio Community 2022 for Mac.
 
@@ -200,3 +191,13 @@ Darwin 22.3.0 Darwin Kernel Version 22.3.0
     Mon Jan 30 20:39:35 PST 2023
     root:xnu-8792.81.3~2/RELEASE_ARM64_T8103 arm64
 </details>
+## [GUI Overview](https://youtu.be/7GnAxm0GyOI)
+
+[![GUI Overview](https://github.com/Storm-Develop/CloudflareZTClient/blob/dev/ImagesUsedInReadme/Screenshot%202023-09-14%20221133.png)](https://youtu.be/7GnAxm0GyOI)
+
+## [Project Overview](https://youtu.be/LxsakqWPrT4?si=IFrQG-AeT6gQ6tvb)
+[![Project Overview](https://github.com/Storm-Develop/CloudflareZTClient/blob/dev/ImagesUsedInReadme/Screenshot%202023-09-14%20221414.png)](https://youtu.be/LxsakqWPrT4?si=IFrQG-AeT6gQ6tvb)
+
+## [Unit Test Overview](https://youtu.be/anQMeQBaoao)
+[![Unit Test Overview](https://github.com/Storm-Develop/CloudflareZTClient/blob/dev/ImagesUsedInReadme/Screenshot%202023-09-14%20221259.png)](https://youtu.be/anQMeQBaoao)
+
