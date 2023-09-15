@@ -112,7 +112,7 @@
                 GetOauthToken();
 
                 // In rare cases it could fail to get oauth token from the server, in order to cover it generating proper status model.
-                if (this.OauthToken.data == null)
+                if (this.OauthToken==null || this.OauthToken.data == null)
                 {
                     this.DaemonStatusModel = new StatusModel();
                     this.DaemonStatusModel.status = "error";
@@ -121,7 +121,7 @@
                 }
             }
 
-            if (this.socketClient != null && this.socketClient.Connected && this.OauthToken.data != null)
+            if (this.socketClient != null && this.socketClient.Connected && this.OauthToken != null && this.OauthToken.data != null)
             {
                 // Send "connect" request
                 await SendRequestAsync(this.socketClient, new { request = new { connect = this.OauthToken.data.auth_token } });
